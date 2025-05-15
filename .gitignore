@@ -1,3 +1,6 @@
+# Large database files
+raw/
+
 # History files
 .Rhistory
 .Rapp.history
