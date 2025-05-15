@@ -9,14 +9,14 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Source databases
 [lsb](https://www.leibniz-lsb.de/en/research/technology-facilities/databases) \
 [foodb](https://foodb.ca/) \
-[AFCD](https://www.foodstandards.gov.au/science-data/monitoringnutrients/afcd/australian-food-composition-database-download-excel-files#nutrient)
-
+[AFCD](https://www.foodstandards.gov.au/science-data/monitoringnutrients/afcd/australian-food-composition-database-download-excel-files#nutrient) \ 
+[CoFID](https://www.gov.uk/government/publications/composition-of-foods-integrated-dataset-cofid)
 
 
 ```{r prep-data, cache=TRUE}
 source("R/prep_afcd.R")
 source("R/prep_foodb.R")
-source("R/prep_nutcomp.R")
+source("R/prep_cofid.R")
 ```
 
 
@@ -28,9 +28,9 @@ do.call(
     list(
         afcd_df %>% mutate(db = "AFCD"),
         foodb_df %>% mutate(db = "foodb"),
-        nutcomp_df %>%
+        cofid_df %>%
             dplyr::select(colnames(afcd_df)) %>%
-            mutate(db = "nutcomp")
+            mutate(db = "CoFID")
     )
 ) %>%
 

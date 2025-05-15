@@ -1,12 +1,12 @@
 library(tidyverse)
 
-nutcomp <- read_csv(
+cofid <- read_csv(
     "raw/nutritional composition.csv",
     na = c("Tr", "", "NA", "N")
 )
 
 
-nutcomp_df <- nutcomp %>%
+cofid_df <- cofid %>%
     pivot_longer(!1:7) %>%
 
     separate_wider_delim(
@@ -36,4 +36,4 @@ nutcomp_df <- nutcomp %>%
     ) %>%
     filter(name %in% c("Fiber, total dietary (AOAC)", "NSP", "Starch"))
 
-rm(nutcomp)
+rm(cofid)
