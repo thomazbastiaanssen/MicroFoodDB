@@ -21,6 +21,8 @@ source("R/prep_nutcomp.R")
 
 
 ```{r compare}
+library(tidyverse)
+
 do.call(
     rbind,
     list(
