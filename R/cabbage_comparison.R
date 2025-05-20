@@ -84,7 +84,7 @@ cabbage_df <- foodb.content %>%
 
     filter(
         food_1 %in%
-            c("chinese (pak-choi)", "chinese, (pe-tsai)", "red", "savoy")
+            c("chinese (pak-choi)", "chinese (pe-tsai)", "red", "savoy")
     ) %>%
 
     mutate(value = log(value)) %>%

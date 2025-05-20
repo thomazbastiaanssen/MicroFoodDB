@@ -51,7 +51,7 @@ cabbage_df %>%
 
     xlab(NULL) + 
     ylab(NULL) + 
-    facet_wrap(~food_1, scales = "free_x") +
+    facet_wrap(~food_1, scales = "free_x", ncol = 4) +
     theme(axis.text.x = element_text(hjust = 0, angle = 345))
 ```
 
