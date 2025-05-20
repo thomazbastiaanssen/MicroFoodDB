@@ -23,7 +23,7 @@ source("R/prep_cofid.R")
     ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 
 ``` r
-library(tidyverse)
+source("R/cabbage_comparison.R")
 ```
 
     ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
@@ -38,38 +38,21 @@ library(tidyverse)
     ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
 
 ``` r
-do.call(
-    rbind,
-    list(
-        afcd_df %>% mutate(db = "AFCD"),
-        foodb_df %>% mutate(db = "foodb"),
-        cofid_df %>%
-            dplyr::select(colnames(afcd_df)) %>%
-            mutate(db = "CoFID")
-    )
-) %>%
+cabbage_df %>%
+    filter(!is.na(food_1)) %>%
 
     ggplot() +
-    aes(x = name, y = value, fill = name) +
 
-    geom_boxplot(aes(group = name)) +
-    geom_point(shape = 21) +
+    aes(x = food_2, y = name, fill = value) +
+    geom_tile() +
 
-    xlab(NULL) +
-    ylab(NULL) +
+    scale_y_discrete(position = "right") +
+    scale_fill_gradient2(high = "red", low = "blue", midpoint = 0) +
 
-    facet_grid(db ~ Food.Cat, scales = "free_y") +
-    theme_bw() +
-    theme(
-        axis.text.x = element_blank(),
-        strip.text.y.right = element_text(angle = 0)
-    )
+    xlab(NULL) + 
+    ylab(NULL) + 
+    facet_wrap(~food_1, scales = "free_x") +
+    theme(axis.text.x = element_text(hjust = 0, angle = 345))
 ```
 
-    ## Warning: Removed 6 rows containing non-finite outside the scale range
-    ## (`stat_boxplot()`).
-
-    ## Warning: Removed 6 rows containing missing values or values outside the scale range
-    ## (`geom_point()`).
-
-![](README_files/figure-gfm/compare-1.png)<!-- -->
+![](README_files/figure-gfm/plot_cabbages-1.png)<!-- -->

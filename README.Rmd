@@ -20,7 +20,7 @@ source("R/prep_cofid.R")
 ```
 
 
-```{r compare}
+```{r compare, echo = FALSE, eval = FALSE}
 library(tidyverse)
 
 do.call(
@@ -51,3 +51,24 @@ do.call(
     )
 
 ```
+
+```{r plot_cabbages, fig.width=12, fig.height=14}
+source("R/cabbage_comparison.R")
+cabbage_df %>%
+    filter(!is.na(food_1)) %>%
+
+    ggplot() +
+
+    aes(x = food_2, y = name, fill = value) +
+    geom_tile() +
+
+    scale_y_discrete(position = "right") +
+    scale_fill_gradient2(high = "red", low = "blue", midpoint = 0) +
+
+    xlab(NULL) + 
+    ylab(NULL) + 
+    facet_wrap(~food_1, scales = "free_x") +
+    theme(axis.text.x = element_text(hjust = 0, angle = 345))
+
+```
+
