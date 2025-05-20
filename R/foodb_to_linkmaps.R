@@ -6,27 +6,11 @@ library(tidyverse)
 #                                     -> ChEBI
 #                                     -> KEGG cpd
 
-FOOD2name <- read.delim("raw/foodb_2020_4_7_csv/Food.csv", sep = ",") %>%
-    dplyr::select(
-        "FOOD" = "public_id",
-        "name" = "name",
-        "food_group",
-        "food_subgroup"
-    )
-
 foodb.content <- read.delim("raw/foodb_2020_4_7_csv/Content.csv", sep = ",")
 
 # Link compounds to foods
 FDB2FOOD <- foodb.content %>%
     filter(source_type == "Compound") %>%
-    dplyr::select("FDB" = "source_id", "FOOD" = "food_id") %>%
-    mutate(
-        FOOD = paste0("FOOD", formatC(FOOD, width = 5, flag = "0")),
-        FDB = paste0("FDB", formatC(FDB, width = 6, flag = "0"))
-    )
-
-foodb.content %>%
-    filter(source_type = "Compound") %>%
     dplyr::select("FDB" = "source_id", "FOOD" = "food_id") %>%
     mutate(
         FOOD = paste0("FOOD", formatC(FOOD, width = 5, flag = "0")),
@@ -75,19 +59,6 @@ FDB2ChEBI <- FDB2external %>%
     select("FDB", "ChEBI" = "external_id")
 
 FDB2name$InChI %>% unique() %>% length()
-
-FOOD2name %>%
-
-    ggplot() +
-
-    aes(y = food_subgroup, label = food_subgroup) +
-
-    geom_text(x = 1 / 2) +
-
-    facet_wrap(~food_group, scales = "free_y") +
-
-    theme_bw() +
-    theme(axis.text.y = element_blank())
 
 #
 # foodb_df %>%
