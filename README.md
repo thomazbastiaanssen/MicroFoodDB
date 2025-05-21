@@ -56,3 +56,44 @@ cabbage_df %>%
 ```
 
 ![](README_files/figure-gfm/plot_cabbages-1.png)<!-- -->
+
+``` r
+source("R/pca_cabbage_comparison.R")
+ggplot(pca) +
+    aes(
+        x = PC1,
+        y = PC2,
+        fill = Food,
+        shape = Preparation
+    ) +
+
+    #Create the points and ellipses
+    stat_ellipse(geom = "polygon", alpha = 1 / 4) +
+    geom_point(size = 3, col = "black") +
+
+    scale_shape_manual(
+        values = c(
+            "raw" = 21,
+            "boiled with salt" = 22,
+            "boiled without salt" = 23
+        )
+    ) +
+    guides(fill = guide_legend(override.aes = list(shape = 21))) +
+
+    theme_bw()
+```
+
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+    ## Too few points to calculate an ellipse
+
+![](README_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
