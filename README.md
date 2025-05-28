@@ -96,4 +96,4 @@ ggplot(pca) +
     ## Too few points to calculate an ellipse
     ## Too few points to calculate an ellipse
 
-![](README_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
+![](README_files/figure-gfm/pca-1.png)<!-- -->
