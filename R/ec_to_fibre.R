@@ -24,10 +24,10 @@ cpd_names <- read.delim("raw/WoL/cpd_names.csv", sep = ",", row.names = 1)
 
 
 compound_name <- read.delim("raw/WoL/compound_name.txt", sep = ",", row.names = 1) %>%
-  rename(V1 = "name", V2 = "compound")
+  dplyr::rename("compound" = V1, "name" = V2)
 
 reaction_ec     <- read.delim("raw/WoL/reaction-to-ec.map", sep = ",", row.names = 1) %>%
-  rename(V1 = "RXN", V2 = "EC") %>%
+  rename("RXN" = V1, "EC" = V2) %>%
   mutate(EC = case_when(str_detect(RXN, "EC-") ~ RXN, .default = EC),
          RXN = case_when(str_detect(RXN, "EC-") ~ NA, .default = RXN),
          ec = str_remove(EC, "EC-")) %>%
@@ -35,13 +35,13 @@ reaction_ec     <- read.delim("raw/WoL/reaction-to-ec.map", sep = ",", row.names
 
 #Bridges
 reaction_left_compound   <-  read.delim("raw/WoL/reaction-to-left_compound.map", sep = ",", row.names = 1) %>%
-  rename(V1 = "RXN") %>%
+  rename("RXN" = V1) %>%
   pivot_longer(!RXN) %>%
   filter(value != "") %>%
   dplyr::select(RXN, compound = value) %>%
   mutate(side = "left")
 reaction_right_compound  <-  read.delim("raw/WoL/reaction-to-right_compound.map", sep = ",", row.names = 1) %>%
-  rename(V1 = "RXN") %>%
+  rename("RXN" = V1) %>%
   pivot_longer(!RXN) %>%
   filter(value != "") %>%
   dplyr::select(RXN, compound = value) %>%
@@ -64,6 +64,10 @@ ko2brite <- read.delim("raw/WoL/ko2brite.csv", sep = ",", row.names = 1) %>%
 ec2kegg <- anansi::kegg_link()$ec2ko
 ec2cpd <- anansi::kegg_link()$ec2cpd
 
+
+
+super_cat <- c("cellulose", "hemicellulose", "pectin")
+sub_cat <- c("a", "b")
 dat <- separate_wider_delim(dat, V1, delim = "   ",
                             names = c("name", "value"),
                             too_few = "align_start", too_many = "merge")
@@ -108,23 +112,20 @@ plot_df <-
   select(!CA)
 
 
-plot_ecs <- plot_df %>%
+plot_ecs = plot_df %>%
 
+  unite("all_metabolite_text", c(name, DE, cpd_names), sep = "_", remove = FALSE) %>%
 
-  mutate(glucose    = str_detect(name, "gluc")  | str_detect(DE, "gluc")   | str_detect(cpd_names, "gluc"),
-         galactose  = str_detect(name, "galact")| str_detect(DE, "galact") | str_detect(cpd_names, "galact"),
-         mannose    = str_detect(name, "mann")  | str_detect(DE, "mann")   | str_detect(cpd_names, "mann"),
-         arabinose  = str_detect(name, "arab")  | str_detect(DE, "arab")   | str_detect(cpd_names, "arab"),
-         xylose     = str_detect(name, "xyl")   | str_detect(DE, "xyl")    | str_detect(cpd_names, "xyl"),
-         fucose     = str_detect(name, "fuc")   | str_detect(DE, "fuc")    | str_detect(cpd_names, "fuc"),
-         gulose     = str_detect(name, "gul")   | str_detect(DE, "gul")    | str_detect(cpd_names, "gul"),
-         rhamnose   = str_detect(name, "rham")  | str_detect(DE, "rham")   | str_detect(cpd_names, "rham")
-         ) %>% replace_na(
-           replace = list(
-             glucose = FALSE, galactose = FALSE, manose = FALSE, gulose = FALSE,
-             arabinose = FALSE, xylose = FALSE, fucose = FALSE, rhamnose = FALSE)
-           ) %>%
-
+  mutate(
+    glucose   = str_detect(all_metabolite_text, pattern = regex("gluc",  ignore_case = TRUE)),
+    galactose = str_detect(all_metabolite_text, pattern = regex("galac", ignore_case = TRUE)),
+    mannose   = str_detect(all_metabolite_text, pattern = regex("mann",  ignore_case = TRUE)),
+    arabinose = str_detect(all_metabolite_text, pattern = regex("arab",  ignore_case = TRUE)),
+    xylose    = str_detect(all_metabolite_text, pattern = regex("xyl",   ignore_case = TRUE)),
+    fucose    = str_detect(all_metabolite_text, pattern = regex("fuc",   ignore_case = TRUE)),
+    gulose    = str_detect(all_metabolite_text, pattern = regex("gul",   ignore_case = TRUE)),
+    rhamnose  = str_detect(all_metabolite_text, pattern = regex("rham",  ignore_case = TRUE))
+         ) %>%
   mutate(ec = factor(ec, levels = ec %>% unique() %>% str_sort(numeric = TRUE) )) %>%
   mutate(category = gsub(DE, pattern = " .*", replacement = "")) %>%
   mutate(category = case_when(str_detect(DE, "heparin") ~ "heparin",
@@ -180,3 +181,7 @@ plot_ecs <- plot_df %>%
   scale_y_discrete(position = "right") +
   theme_bw() +
   theme(strip.text.y.left = element_text(angle = 0, hjust = 0))
+
+
+
+
