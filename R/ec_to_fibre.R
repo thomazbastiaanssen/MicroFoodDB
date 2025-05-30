@@ -203,7 +203,7 @@ plot_df %>%
 
                              str_detect(DE, regex("^xylan|-xylan")) ~ "xylan",
                              str_detect(DE, regex("^arabinan|-arabinan")) ~ "arabinan",
-                             str_detect(DE, regex("^fructan")) ~ "fructan",
+                             str_detect(DE, regex("^fructan|-fructan")) ~ "fructan",
                              str_detect(DE, regex("^glucan")) ~ "glucan",
                              str_detect(DE, regex("^xanthan")) ~ "xanthan",
                              str_detect(DE, regex("^mannan|-mannan")) ~ "mannan",

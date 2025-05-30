@@ -16,7 +16,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 #| fig.width = 14, 
-#| fig.height = 22
+#| fig.height = 24
 source("R/ec_to_fibre.R")
 plot_ecs
 ```
